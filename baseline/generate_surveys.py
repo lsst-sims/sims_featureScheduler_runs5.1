@@ -229,19 +229,30 @@ def standard_bf(
     if bandname2 is not None:
         bfs.append(
             (
-                bf.M5DiffBasisFunction(bandname=bandname, nside=nside),
+                bf.M5DiffBasisFunction(
+                    bandname=bandname, nside=nside, fiducial_FWHMEff=fiducial_fwhm
+                ),
                 m5_weight / 2.0,
             )
         )
         bfs.append(
             (
-                bf.M5DiffBasisFunction(bandname=bandname2, nside=nside),
+                bf.M5DiffBasisFunction(
+                    bandname=bandname2, nside=nside, fiducial_FWHMEff=fiducial_fwhm
+                ),
                 m5_weight / 2.0,
             )
         )
 
     else:
-        bfs.append((bf.M5DiffBasisFunction(bandname=bandname, nside=nside), m5_weight))
+        bfs.append(
+            (
+                bf.M5DiffBasisFunction(
+                    bandname=bandname, nside=nside, fiducial_FWHMEff=fiducial_fwhm
+                ),
+                m5_weight,
+            )
+        )
 
     if bandname2 is not None:
         bfs.append(
