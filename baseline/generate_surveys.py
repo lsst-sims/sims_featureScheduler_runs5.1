@@ -1171,7 +1171,8 @@ def generate_blobs(
             )
         )
 
-        # Insert things for getting good seeing templates
+        # Insert things for getting good seeing images
+        # Probably for galaxy shape measurements.
         if bandname2 is not None:
             if bandname in list(good_seeing.keys()):
                 bfs.append(
