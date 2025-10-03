@@ -86,12 +86,13 @@ def gen_roman_on_season(
     # Add a dither detailer, so it dithers between each set
     # of exposures I guess?
     details = []
-    details.append(detailers.DitherDetailer(max_dither=0.5, seed=42, per_night=True))
+    details.append(detailers.DitherDetailer(max_dither=0.5, seed=42, per_night=False))
     details.append(
         detailers.CameraRotDetailer(
             min_rot=-camera_ddf_rot_limit, max_rot=camera_ddf_rot_limit
         )
     )
+    details.append(detailers.RollBandMatchDetailer())
 
     survey = DeepDrillingSurvey(
         basis_functions,
@@ -159,12 +160,13 @@ def gen_roman_off_season(
     # Add a dither detailer, so it dithers between each
     # set of exposures I guess?
     details = []
-    details.append(detailers.DitherDetailer(max_dither=0.5, seed=42, per_night=True))
+    details.append(detailers.DitherDetailer(max_dither=0.5, seed=43, per_night=False))
     details.append(
         detailers.CameraRotDetailer(
             min_rot=-camera_ddf_rot_limit, max_rot=camera_ddf_rot_limit
         )
     )
+    details.append(detailers.RollBandMatchDetailer())
 
     survey = DeepDrillingSurvey(
         basis_functions,
