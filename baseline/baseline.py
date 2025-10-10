@@ -322,7 +322,7 @@ def gen_scheduler(
     ]
 
     # Make the templates footprint
-    template_fp = Footprint(SURVEY_START_MJD, sun_ra_start)
+    template_fp = Footprint(SURVEY_START_MJD, sun_ra_start, nside=nside)
     for key in footprints_hp_array.dtype.names:
         indx = np.where(footprints_hp_array[key] > 0)[0]
         tmp_fp = footprints_hp_array[key] * 0 + np.nan
