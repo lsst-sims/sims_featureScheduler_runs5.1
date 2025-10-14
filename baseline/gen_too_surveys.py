@@ -19,7 +19,7 @@ def gen_too_surveys(
     long_exp_nsnaps=2,
     n_snaps=2,
     wind_speed_maximum=20.0,
-    observation_reason="ToO",
+    observation_reason="target_of_opportunity",
     science_program=None,
 ):
     result = []

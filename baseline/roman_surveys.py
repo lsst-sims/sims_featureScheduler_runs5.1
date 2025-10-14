@@ -93,6 +93,9 @@ def gen_roman_on_season(
         )
     )
     details.append(detailers.RollBandMatchDetailer())
+    details.append(detailers.TrackingInfoDetailer(target_name="roman_field",
+                                                  science_program="",
+                                                  observation_reason="rges_onseason"))
 
     survey = DeepDrillingSurvey(
         basis_functions,
@@ -167,6 +170,9 @@ def gen_roman_off_season(
         )
     )
     details.append(detailers.RollBandMatchDetailer())
+    details.append(detailers.TrackingInfoDetailer(target_name="roman_field",
+                                                  science_program="",
+                                                  observation_reason="rges_offseason"))
 
     survey = DeepDrillingSurvey(
         basis_functions,

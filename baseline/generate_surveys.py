@@ -1301,6 +1301,8 @@ def generate_twi_blobs(
     blob_survey_params: dict | None = None,
     safety_mask_params: dict | None = None,
     pair_pad: float = 5.0,
+    observation_reason: str = "twilight_near_sun",
+
 ) -> list[BlobSurvey]:
     """
     Generate surveys that take observations in blobs, for twilight time.
@@ -1476,11 +1478,6 @@ def generate_twi_blobs(
             survey_name = "pair_%i, %s%s" % (pair_time, bandname, bandname2)
         if bandname2 is not None:
             detailer_list.append(detailers.TakeAsPairsDetailer(bandname=bandname2))
-
-        observation_reason = f"pairs_{bandname}"
-        if bandname2 is not None:
-            observation_reason += f"{bandname2}"
-        observation_reason += f"_{pair_time :.1f}"
 
         surveys.append(
             BlobSurvey(
