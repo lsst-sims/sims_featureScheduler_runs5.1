@@ -43,7 +43,7 @@ class SmallFP1(CurrentAreaMap):
     """Adjust the limits of the footprint
     """
 
-    def __init__(self):
+    def __init__(self, **kwargs):
         kw = default_kwargs
 
         kw["low_dust_dec_max"] = 5
@@ -103,7 +103,7 @@ class SmallFP2(CurrentAreaMap):
     """Adjust the limits of the footprint
     """
 
-    def __init__(self):
+    def __init__(self, **kwargs):
         kw = default_kwargs
 
         kw["low_dust_dec_max"] = 2.
