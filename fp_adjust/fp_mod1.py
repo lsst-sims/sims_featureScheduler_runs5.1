@@ -12,6 +12,8 @@ import subprocess
 import sys
 
 import numpy as np
+import pandas as pd
+import sqlite3
 import numpy.typing as npt
 import rubin_scheduler
 import rubin_scheduler.scheduler.detailers as detailers
@@ -26,7 +28,9 @@ from rubin_scheduler.scheduler.utils import (
     Footprint,
     ObservationArray,
     make_rolling_footprints,
-    restore_scheduler
+    restore_scheduler,
+    SchemaConverter,
+    run_info_table,
 )
 from rubin_scheduler.site_models import Almanac
 from rubin_scheduler.utils import DEFAULT_NSIDE, SURVEY_START_MJD
@@ -158,11 +162,15 @@ def run_sched(
     scheduler, observatory = restore_scheduler(150844, scheduler, observatory, start_file)
     survey_length = survey_length - 365
 
+    sc = SchemaConverter()
+    # load up the observations
+    y1_observations = sc.opsim2obs(start_file)
+
     observatory, scheduler, observations = sim_runner(
         observatory,
         scheduler,
         sim_duration=survey_length,
-        filename=filename,
+        filename=None,
         delete_past=True,
         n_visit_limit=n_visit_limit,
         verbose=verbose,
@@ -171,6 +179,19 @@ def run_sched(
         event_table=event_table,
         snapshot_dir=snapshot_dir,
     )
+
+    observations = np.concatenate([y1_observations, observations])
+
+    # Write out concatenated results
+    if filename is not None:
+        info = run_info_table(observatory, extra_info=extra_info)
+        converter = SchemaConverter()
+        converter.obs2opsim(observations, filename=filename, info=info, delete_past=True)
+    if event_table is not None:
+        df = pd.DataFrame(event_table)
+        con = sqlite3.connect(filename)
+        df.to_sql("events", con)
+        con.close()
 
     return observatory, scheduler, observations
 

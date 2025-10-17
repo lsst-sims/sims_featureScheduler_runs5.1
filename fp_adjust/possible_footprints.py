@@ -1,9 +1,9 @@
-__all__ = ("SmallFP1", "SmallFP2")
+__all__ = ("SmallFP1", "SmallFP2", "SmallFP3")
 
 import numpy as np
 import healpy as hp
 from rubin_scheduler.scheduler.utils import CurrentAreaMap
-from rubin_scheduler.utils import DEFAULT_NSIDE
+from rubin_scheduler.utils import DEFAULT_NSIDE, angular_separation
 
 
 default_kwargs = {"nside":DEFAULT_NSIDE,
@@ -112,3 +112,97 @@ class SmallFP2(CurrentAreaMap):
         kw["eclip_dec_min"] = -10
 
         super().__init__(**kw)
+
+
+class SmallFP3(CurrentAreaMap):
+
+    def __init__(self, nside=32, **kwargs):
+        kw = default_kwargs
+        kw["nside"] = nside
+
+        kw["low_dust_dec_max"] = 2.
+        kw["low_dust_dec_min"] = -62
+        kw["dusty_dec_max"] = 2
+        kw["eclip_dec_min"] = -10
+
+        super().__init__(**kw)
+
+    def add_bulgy(self, band_ratios, label="bulgy"):
+        """Define a bulge region, where the 'bulge' is a series of
+        circles set by points defined to match as best as possible the
+        map requested by the SMWLV working group on galactic plane coverage.
+        Implemented in v3.0.
+        Updates self.healmaps and self.pix_labels.
+
+        Parameters
+        ----------
+        band_ratios : `dict` {`str`: `float`}
+            Dictionary of weights per band for the footprint.
+        label : `str`, optional
+            Label to apply to the resulting footprint
+        """
+        # Some RA, dec, radius points that
+        # seem to cover the areas that are desired
+        points = [
+            [266.3, -29, 14.5],
+            [279, -13, 10],
+            [256, -45, 5],
+            [155, -56.5, 6.5],
+            [172, -62, 5],
+            [190, -65, 5],
+            [210, -64, 5],
+            [242, -58, 5],
+            [225, -60, 6.5],
+        ]
+        for point in points:
+            dist = angular_separation(self.ra, self.dec, point[0], point[1])
+            # Only change pixels where the label isn't already set.
+            indx = np.where((dist < point[2]) & (self.pix_labels == ""))
+            self.pix_labels[indx] = label
+            for bandname in band_ratios:
+                self.healmaps[bandname][indx] = band_ratios[bandname]
+
+    def return_maps(
+        self,
+        magellenic_clouds_ratios={
+            "u": 0.65,
+            "g": 0.65,
+            "r": 1.1,
+            "i": 1.1,
+            "z": 0.34,
+            "y": 0.35,
+        },
+        scp_ratios={"u": 0.1, "g": 0.175, "r": 0.1, "i": 0.135, "z": 0.046, "y": 0.047},
+        nes_ratios={"g": 0.255, "r": 0.33, "i": 0.33, "z": 0.23},
+        dusty_plane_ratios={
+            "u": 0.093,
+            "g": 0.26,
+            "r": 0.26,
+            "i": 0.26,
+            "z": 0.26,
+            "y": 0.093,
+        },
+        low_dust_ratios={"u": 0.35, "g": 0.4, "r": 1.0, "i": 1.0, "z": 0.9, "y": 0.9},
+        bulge_ratios={"u": 0.17, "g": 0.93, "r": 0.98, "i": 0.98, "z": 0.93, "y": 0.21},
+        virgo_ratios={"u": 0.35, "g": 0.4, "r": 1.0, "i": 1.0, "z": 0.9, "y": 0.9},
+        euclid_ratios={"u": 0.35, "g": 0.4, "r": 1.0, "i": 1.0, "z": 0.9, "y": 0.9},
+    ):
+        # Array to hold the labels for each pixel
+        self.pix_labels = np.zeros(hp.nside2npix(self.nside), dtype="U20")
+        self.healmaps = np.zeros(
+            hp.nside2npix(self.nside),
+            dtype=list(zip(["u", "g", "r", "i", "z", "y"], [float] * 7)),
+        )
+
+        # Note, order here matters.
+        # Once a HEALpix is set and labled, subsequent add_ methods
+        # will not override that pixel.
+        self.add_magellanic_clouds(magellenic_clouds_ratios)
+        self.add_lowdust_wfd(low_dust_ratios)
+        self.add_bulgy(bulge_ratios)
+        self.add_nes(nes_ratios)
+        self.add_dusty_plane(dusty_plane_ratios)
+        self.add_euclid_overlap(euclid_ratios)
+        self.add_scp(scp_ratios)
+
+        return self.healmaps, self.pix_labels

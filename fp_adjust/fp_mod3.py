@@ -50,7 +50,7 @@ from generate_surveys import (
     generate_twilight_near_sun,
 )
 
-from possible_footprints import SmallFP2
+from possible_footprints import SmallFP3
 
 # So things don't fail on hyak
 iers.conf.auto_download = False
@@ -251,7 +251,7 @@ def gen_scheduler(
     ei_night_pattern = pattern_dict[ei_night_pattern]
     reverse_ei_night_pattern = [not val for val in ei_night_pattern]
 
-    sky = SmallFP2(nside=nside)
+    sky = SmallFP3(nside=nside)
     footprints_hp_array, labels = sky.return_maps()
 
     wfd_indx = np.where((labels == "lowdust") | (labels == "virgo"))[0]
