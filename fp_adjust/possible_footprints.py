@@ -46,8 +46,8 @@ class SmallFP1(CurrentAreaMap):
     def __init__(self, **kwargs):
         kw = default_kwargs
 
-        kw["low_dust_dec_max"] = 5
-        kw["dusty_dec_max"] = 5
+        kw["low_dust_dec_max"] = 3
+        kw["dusty_dec_max"] = 3
         kw["eclip_dec_min"] = -10
 
         super().__init__(**kw)
