@@ -18,7 +18,7 @@ from rubin_scheduler.scheduler import sim_runner
 from rubin_scheduler.scheduler.model_observatory import ModelObservatory, tma_movement
 from rubin_scheduler.scheduler.schedulers import CoreScheduler, SimpleBandSched
 from rubin_scheduler.scheduler.targetofo import gen_all_events
-from rubin_scheduler.scheduler.utils import  ObservationArray
+from rubin_scheduler.scheduler.utils import ObservationArray
 from rubin_scheduler.utils import DEFAULT_NSIDE, SURVEY_START_MJD
 
 
@@ -26,7 +26,6 @@ from rubin_scheduler.utils import DEFAULT_NSIDE, SURVEY_START_MJD
 iers.conf.auto_download = False
 # XXX--note this line probably shouldn't be in production
 iers.conf.auto_max_age = None
-
 
 
 def set_run_info(
@@ -134,6 +133,7 @@ def gen_scheduler(
     nside, scheduler = get_scheduler()
     
     years = np.round(survey_length / 365.25)
+
     observatory, scheduler, observations = run_sched(
         scheduler,
         survey_length=survey_length,

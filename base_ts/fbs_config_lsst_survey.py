@@ -2,29 +2,43 @@ import logging
 import sys
 from pathlib import Path
 
-sys.path.append(str(Path(__file__).parent))
-import lsst.ts.fbs.utils.maintel.lsst_surveys as lsst_surveys  # noqa #402
-import lsst.ts.fbs.utils.maintel.roman_surveys as roman_surveys  # noqa #402
-import lsst.ts.fbs.utils.maintel.too_surveys as too_surveys  # noqa #402
-import numpy as np  # noqa #402
-import rubin_scheduler.scheduler.detailers as detailers  # noqa #402
-from lsst_ddf_gen import gen_ddf_surveys  # noqa #402
-from rubin_scheduler.scheduler.schedulers import CoreScheduler  # noqa #402
-from rubin_scheduler.scheduler.utils import (  # noqa #402
+import lsst.ts.fbs.utils.maintel.lsst_surveys as lsst_surveys
+import lsst.ts.fbs.utils.maintel.roman_surveys as roman_surveys
+import lsst.ts.fbs.utils.maintel.too_surveys as too_surveys
+import numpy as np
+import rubin_scheduler.scheduler.detailers as detailers
+from rubin_scheduler.scheduler.schedulers import CoreScheduler
+from rubin_scheduler.scheduler.utils import (
     CurrentAreaMap,
     Footprint,
     make_rolling_footprints,
 )
-from rubin_scheduler.site_models import Almanac  # noqa #402
-from rubin_scheduler.utils import SURVEY_START_MJD  # noqa #402
+from rubin_scheduler.site_models import Almanac
+from rubin_scheduler.utils import SURVEY_START_MJD
+
+sys.path.append(str(Path(Path(__file__).parent.parent.parent, "ddf_gen")))
+from lsst_ddf_gen import gen_ddf_surveys  # noqa #402
 
 __all__ = ("get_scheduler",)
 
 logger = logging.getLogger(__name__)
 
 
-def get_scheduler(save_ddf_array=False) -> tuple[int, CoreScheduler]:
+def get_scheduler(
+    save_ddf_array=False, save_ddf_array_path=None
+) -> tuple[int, CoreScheduler]:
     """Construct the LSST survey scheduler.
+
+    The parameters are not accessible when calling as 'config'.
+
+    Parameters
+    ----------
+    save_ddf_array : `bool`
+        Whether or not to save the ddf array to disk, if it needs to be
+        recalculated.
+    save_ddf_array_path : `str` or None
+        The directory in which to find or save the ddf_array.
+        The ddf_array file will be called `ddf_array
 
     Returns
     -------
@@ -57,8 +71,8 @@ def get_scheduler(save_ddf_array=False) -> tuple[int, CoreScheduler]:
         "nside": nside,
         "wind_speed_maximum": 40,
         "time_to_sunrise": 3.0,
-        "min_az_sunrise": 120,
-        "max_az_sunrise": 290,
+        "min_az_sunrise": 150,
+        "max_az_sunrise": 250,
     }
 
     # General parameters for standard pairs (-80/80 default)
@@ -205,6 +219,7 @@ def get_scheduler(save_ddf_array=False) -> tuple[int, CoreScheduler]:
         science_program=science_program,
         shadow_minutes=30,
         save=save_ddf_array,
+        save_path=save_ddf_array_path,
         safety_mask_params=safety_mask_params,
     )
 
@@ -362,13 +377,13 @@ def get_scheduler(save_ddf_array=False) -> tuple[int, CoreScheduler]:
         f"Configured {len(surveys)} tiers of surveys in the baseline configuration."
     )
 
-    return (nside, scheduler)
+    return nside, scheduler
 
 
 if __name__ == "config":
-    (nside, scheduler) = get_scheduler()
+    nside, scheduler = get_scheduler()
 
 
 if __name__ == "__main__":
     # This is only here as a way to save the DDF npz array to disk.
-    (nside, scheduler) = get_scheduler(save_ddf_array=True)
+    nside, scheduler = get_scheduler(save_ddf_array=True)
