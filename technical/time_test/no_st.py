@@ -364,7 +364,6 @@ def gen_scheduler(
             toos,
             roman_surveys,
             ddfs,
-            template_surveys,
             long_gaps,
             blobs,
             twi_blobs,
@@ -376,7 +375,6 @@ def gen_scheduler(
         surveys = [
             roman_surveys,
             ddfs,
-            template_surveys,
             long_gaps,
             blobs,
             twi_blobs,
