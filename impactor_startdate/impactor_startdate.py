@@ -176,8 +176,7 @@ def gen_scheduler(
     out_dir = args.out_dir
     verbose = args.verbose
     dbroot = args.dbroot
-    nside = args.nside
-    mjd_plus = args.mjd_plus
+    nside = DEFAULT_NSIDE
     split_long = args.split_long
     snapshot_dir = args.snapshot_dir
     too = not args.no_too
