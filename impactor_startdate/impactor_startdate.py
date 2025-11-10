@@ -177,8 +177,6 @@ def gen_scheduler(
     verbose = args.verbose
     dbroot = args.dbroot
     nside = DEFAULT_NSIDE
-    split_long = args.split_long
-    snapshot_dir = args.snapshot_dir
     too = not args.no_too
 
     # Parameters that were previously command-line
@@ -355,7 +353,7 @@ def gen_scheduler(
             nside=nside,
             detailer_list=detailer_list,
             too_footprint=too_footprint,
-            split_long=split_long,
+            split_long=False,
             n_snaps=NEXP,
         )
         surveys = [
@@ -403,7 +401,7 @@ def gen_scheduler(
             survey_start_mjd=survey_start_mjd,
             event_table=event_table,
             sim_to_o=sim_ToOs,
-            snapshot_dir=snapshot_dir,
+            snapshot_dir=None,
         )
         return observatory, scheduler, observations
 
