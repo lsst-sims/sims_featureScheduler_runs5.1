@@ -10,14 +10,14 @@ def generate_ddf_df():
 
     short_squences = [
         {
-            "u": 3,
+            "u": 4,
             "season_length": 225,
             "flush_length": 2.0,
             "g_depth_limit": 23.5,
             "n_sequences": 33,
         },
         {
-            "y": 2,
+            "y": 3,
             "season_length": 225,
             "flush_length": 2.0,
             "g_depth_limit": 23.5,
@@ -25,7 +25,7 @@ def generate_ddf_df():
         },
         {
             "g": 2,
-            "i": 2,
+            "i": 3,
             "season_length": 225,
             "flush_length": 0.5,
             "g_depth_limit": 22.8,
@@ -34,7 +34,7 @@ def generate_ddf_df():
         },
         {
             "r": 2,
-            "z": 2,
+            "z": 3,
             "season_length": 225,
             "flush_length": 0.5,
             "g_depth_limit": 22.8,
@@ -130,7 +130,7 @@ def generate_ddf_df():
         },
         {
             "g": 2,
-            "i": 2,
+            "i": 3,
             "season_length": 225,
             "flush_length": 0.5,
             "g_depth_limit": 22.8,
@@ -139,7 +139,7 @@ def generate_ddf_df():
         },
         {
             "r": 2,
-            "z": 2,
+            "z": 3,
             "season_length": 225,
             "flush_length": 0.5,
             "g_depth_limit": 22.8,
