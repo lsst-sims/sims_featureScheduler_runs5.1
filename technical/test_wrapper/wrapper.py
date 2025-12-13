@@ -86,7 +86,7 @@ def generate_baseline_coresched(
     args.outDir = "."
     args.nside = nside
     args.survey_start_mjd = survey_start_mjd
-    scheduler = gen_scheduler(args)
+    scheduler = SummitWrapper(gen_scheduler(args))
     return scheduler
 
 
