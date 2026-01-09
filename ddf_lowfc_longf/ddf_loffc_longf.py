@@ -20,7 +20,7 @@ from gen_too_surveys import gen_too_surveys
 from roman_surveys import gen_roman_off_season, gen_roman_on_season
 from rubin_scheduler.scheduler import sim_runner
 from rubin_scheduler.scheduler.model_observatory import ModelObservatory, tma_movement
-from rubin_scheduler.scheduler.schedulers import CoreScheduler, SimpleBandSched, SummitWrapper
+from rubin_scheduler.scheduler.schedulers import CoreScheduler, SimpleBandSched
 from rubin_scheduler.scheduler.targetofo import gen_all_events
 from rubin_scheduler.scheduler.utils import (
     CurrentAreaMap,
@@ -54,7 +54,7 @@ iers.conf.auto_max_age = None
 
 def example_scheduler(**kwargs) -> CoreScheduler:
     """Renamed"""
-    return SummitWrapper(generate_baseline_coresched(**kwargs))
+    return generate_baseline_coresched(**kwargs)
 
 
 def generate_baseline_coresched(
@@ -86,7 +86,7 @@ def generate_baseline_coresched(
     args.outDir = "."
     args.nside = nside
     args.survey_start_mjd = survey_start_mjd
-    scheduler = SummitWrapper(gen_scheduler(args))
+    scheduler = gen_scheduler(args)
     return scheduler
 
 
