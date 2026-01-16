@@ -5,6 +5,7 @@ __all__ = (
     "generate_blobs",
     "generate_twi_blobs",
     "generate_twilight_near_sun",
+    "generate_qm",
     "standard_bf",
     "safety_masks",
     "ddf_surveys",
@@ -16,6 +17,7 @@ from pathlib import Path
 import numpy as np
 import numpy.typing as npt
 import rubin_scheduler.scheduler.basis_functions as bf
+from rubin_scheduler.scheduler.schedulers import BaseQueueManager
 import rubin_scheduler.scheduler.detailers as detailers
 from rubin_scheduler.scheduler.surveys import (
     BlobSurvey,
@@ -147,6 +149,22 @@ def safety_masks(
             )
         )
     return mask_bfs
+
+
+def generate_qm():
+
+    detailer_list = []
+    detailer_list.append(detailers.RotspUpdateDetailer())
+
+    bf_list = []
+    # This should get zenith masked
+    bf_list.append(bf.SlewtimeBasisFunction())
+    # Any clouds that have rolled in
+    bf_list.append(bf.MapCloudBasisFunction())
+
+    qm = BaseQueueManager(detailers=detailer_list, basis_functions=bf_list)
+
+    return qm
 
 
 def standard_bf(

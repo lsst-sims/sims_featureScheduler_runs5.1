@@ -44,6 +44,7 @@ from generate_surveys import (
     generate_blobs,
     generate_twi_blobs,
     generate_twilight_near_sun,
+    generate_qm,
 )
 
 # So things don't fail on hyak
@@ -204,7 +205,7 @@ def gen_scheduler(
 
     fileroot, extra_info = set_run_info(
         dbroot=dbroot,
-        file_end="v5.1.1_",
+        file_end="v5.1.2_",
         out_dir=out_dir,
     )
 
@@ -387,6 +388,10 @@ def gen_scheduler(
         sim_ToOs = None
         event_table = None
         fileroot = fileroot.replace("baseline", "no_too")
+
+    qm = generate_qm()
+    scheduler = CoreScheduler(surveys, nside=nside, survey_start_mjd=survey_start_mjd,
+                              queue_manager=qm)
 
     scheduler = CoreScheduler(surveys, nside=nside, survey_start_mjd=survey_start_mjd)
 
