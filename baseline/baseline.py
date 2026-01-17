@@ -393,8 +393,6 @@ def gen_scheduler(
     scheduler = CoreScheduler(surveys, nside=nside, survey_start_mjd=survey_start_mjd,
                               queue_manager=qm)
 
-    scheduler = CoreScheduler(surveys, nside=nside, survey_start_mjd=survey_start_mjd)
-
     if args.setup_only:
         return scheduler
     else:
